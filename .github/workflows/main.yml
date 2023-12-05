@@ -1,0 +1,37 @@
+name: "Merge Contentstack branches"
+
+on:
+  workflow_dispatch:
+    inputs:
+      stack-id:
+        type: string
+        description: 'Stack ID'
+        default: "World"
+        required: true
+      base_branch:
+        type: choice
+        description: 'Base branch'
+        required: true
+        options:
+          - "main"
+          - "staging"
+          - "preview"
+      compare_branch:
+        type: string
+        description: 'Compare branch'
+        default: "preview"
+        required: true
+
+jobs:
+  update_stack:
+    name: "Update stack on Contentstack"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create .env file
+        env:
+          STACK_ID: ${{ inputs.stack-id }}
+        run: |
+          echo "Update stack on Contentstack!!!"
+          echo "STACK_ID: ${{ env.STACK_ID }}"
+          echo "base_branch: ${{ inputs.base_branch }}"
+          echo "compare_branch: ${{ inputs.compare_branch }}"
