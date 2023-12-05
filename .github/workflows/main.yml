@@ -36,13 +36,15 @@ jobs:
   update_stack:
     name: "Merge branches in Contentstack. only for the content type and global field modules of your stack"
     runs-on: ubuntu-latest
+    env: 
+      API_KEY: ${{ inputs.api_key }}
     steps:
       - name: Show all environment variables
-        env:
-          API_KEY: ${{ inputs.api_key }}
+        env:          
           BASE_URL: "https://eu-api.contentstack.com"
           default_merge_strategy: "overwrite_with_compare"
           merge_comment: "merge comment"
+        id: e2e
         run: |
           echo "Merge branches on Contentstack!"
           echo "api_key: ${{ env.API_KEY }}"
@@ -52,6 +54,7 @@ jobs:
       - name: Merging Branches API
         run: |
           echo '${{ env.API_KEY }}'
+          echo '${{ inputs.authorization }}'
           # curl --location '${{ env.BASE_URL }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}' \
           # --header 'api_key: ${{ inputs.api_key }}' \
           # --header 'authorization: ${{ inputs.authorization }}' \
