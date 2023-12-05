@@ -23,7 +23,7 @@ on:
           - "staging"
           - "preview"
       compare_branch:
-        type: string
+        type: choice
         description: 'Compare branch'
         default: "preview"
         required: true
@@ -34,10 +34,10 @@ on:
 
 jobs:
   update_stack:
-    name: "Update stack on Contentstack"
+    name: "Merge branches in Contentstack. only for the content type and global field modules of your stack"
     runs-on: ubuntu-latest
     steps:
-      - name: Create .env file
+      - name: Show all environment variables
         env:
           API_KEY: ${{ inputs.api_key }}
         run: |
@@ -46,3 +46,4 @@ jobs:
           echo "authorization: ${{ inputs.authorization }}"
           echo "base_branch: ${{ inputs.base_branch }}"
           echo "compare_branch: ${{ inputs.compare_branch }}"
+      - name: Request
