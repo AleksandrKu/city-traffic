@@ -44,19 +44,19 @@ jobs:
         run: |
           echo "Merging Branches in Contentstack..."
           # Execute the curl command
-          response=$(curl --location "${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}" \
+          url="${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}"
+          response=$(curl --location "$url" \
             --header "api_key: ${{ inputs.api_key }}" \
             --header "authorization: ${{ inputs.authorization }}" \
             --header 'Content-Type: application/json' \
             --data '{ }' \
             --write-out "%{http_code}" --silent --output /dev/null)
 
-
           # Check for successful response
-          if [ "$response" -eq 200 ]; then
-            echo "Merge successful"
+          if [ "$response" -eq 200 ] || [ "$response" -eq 202 ]; then
+              echo "Merge successful"
           else
-            echo "Merge failed with status code: $response"
-            exit 1
+              echo "Merge failed with status code: $response"
+              exit 1
           fi
 
