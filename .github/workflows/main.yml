@@ -37,25 +37,19 @@ jobs:
     name: "Merge branches in Contentstack. only for the content type and global field modules of your stack"
     runs-on: ubuntu-latest
     env: 
-      API_KEY: ${{ inputs.api_key }}
+      base_url: "https://eu-api.contentstack.com"
+      default_merge_strategy: "overwrite_with_compare"
+      merge_comment: "merge comment"
     steps:
-      - name: Show all environment variables
-        env:          
-          BASE_URL: "https://eu-api.contentstack.com"
-          default_merge_strategy: "overwrite_with_compare"
-          merge_comment: "merge comment"
-        id: e2e
+      - name: Merging Branches API
         run: |
-          echo "Merge branches on Contentstack!"
-          echo "api_key: ${{ env.API_KEY }}"
+          echo "api_key: ${{ env.api_key }}"
           echo "authorization: ${{ inputs.authorization }}"
           echo "base_branch: ${{ inputs.base_branch }}"
           echo "compare_branch: ${{ inputs.compare_branch }}"
-      - name: Merging Branches API
-        run: |
-          echo '${{ env.API_KEY }}'
-          echo '${{ inputs.authorization }}'
-          # curl --location '${{ env.BASE_URL }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}' \
+          echo '${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}'
+
+          # curl --location '${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}' \
           # --header 'api_key: ${{ inputs.api_key }}' \
           # --header 'authorization: ${{ inputs.authorization }}' \
           # --header 'Content-Type: application/json' \
