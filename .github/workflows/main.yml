@@ -3,14 +3,20 @@ name: "Merge Contentstack branches"
 on:
   workflow_dispatch:
     inputs:
-      stack-id:
+      api_key:
         type: string
-        description: 'Stack ID'
-        default: "World"
+        description: 'STACK_API_KEY. Default is development stack'
+        default: "blta88cf8aaa9f0bdb2"
+        required: true
+      authorization:
+        type: string
+        description: 'STACK_MANAGEMENT_TOKEN. Default is development stack'
+        default: "cs1327b2e47cf746839491e2c1"
         required: true
       base_branch:
         type: choice
         description: 'Base branch'
+        default: "staging"
         required: true
         options:
           - "main"
@@ -21,6 +27,10 @@ on:
         description: 'Compare branch'
         default: "preview"
         required: true
+        options:
+          - "main"
+          - "staging"
+          - "preview"
 
 jobs:
   update_stack:
@@ -29,9 +39,10 @@ jobs:
     steps:
       - name: Create .env file
         env:
-          STACK_ID: ${{ inputs.stack-id }}
+          API_KEY: ${{ inputs.api_key }}
         run: |
-          echo "Update stack on Contentstack!!!"
-          echo "STACK_ID: ${{ env.STACK_ID }}"
+          echo "Merge branches on Contentstack!"
+          echo "api_key: ${{ env.API_KEY }}"
+          echo "authorization: ${{ inputs.authorization }}"
           echo "base_branch: ${{ inputs.base_branch }}"
           echo "compare_branch: ${{ inputs.compare_branch }}"
