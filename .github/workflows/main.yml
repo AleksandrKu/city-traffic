@@ -44,28 +44,27 @@ jobs:
       - name: Verify the branch count in Contentstack.
         run: |
           url="${{ env.base_url }}/v3/stacks/branches"  
-          response=$(curl --location "$url" \
+          # Execute curl and capture both the HTTP status code and the response body
+          http_status=$(curl --location --silent --write-out "%{http_code}" --output response.json "$url" \
             --header "api_key: ${{ inputs.api_key }}" \
             --header "authorization: ${{ inputs.authorization }}" \
-            --header 'Content-Type: application/json' \
-            --write-out "%{http_code}" --silent --output /dev/null)
-            
+            --header 'Content-Type: application/json')
+          
           # Check for successful response
-          if [ "$response" -eq 200 ] || [ "$response" -eq 202 ]; then
+          if [ "$http_status" -eq 200 ] || [ "$http_status" -eq 202 ]; then
               echo "Check branch count successful"
           else
-              echo "Check branch count failed with status code: $response"
+              echo "Check branch count failed with status code: $http_status"
               exit 1
           fi
           
-          # Check if the response contains more than the specified branches
-          branch_count=$(echo "$response" | grep -o '"uid":' | wc -l)  
+          # Parse the response to count branches
+          branch_count=$(grep -o '"uid":' response.json | wc -l)
+          
           # Compare the count with the maximum
-          echo "$response"
-          echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-          echo "$branch_count"
+          echo "Branch count: $branch_count"
           if [ "$branch_count" -gt $MAX_BRANCHES ]; then
-              echo "Error: More than $MAX_BRANCHES branches found. For merging branches, there should be no more than five branches."
+              echo "Error: More than $MAX_BRANCHES branches found. For merging branches, there should be no more than $MAX_BRANCHES  branches."
               exit 1
           fi
     
