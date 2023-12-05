@@ -1,4 +1,4 @@
-name: "Merge Contentstack branches"
+chname: "Merge Contentstack branches"
 
 on:
   workflow_dispatch:
@@ -61,6 +61,9 @@ jobs:
           # Check if the response contains more than the specified branches
           branch_count=$(echo "$response" | grep -o '"uid":' | wc -l)  
           # Compare the count with the maximum
+          echo "$response"
+          echo "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+          echo "$branch_count"
           if [ "$branch_count" -gt $MAX_BRANCHES ]; then
               echo "Error: More than $MAX_BRANCHES branches found. For merging branches, there should be no more than five branches."
               exit 1
