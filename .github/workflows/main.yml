@@ -1,4 +1,4 @@
-chname: "Merge Contentstack branches"
+name: "Merge Contentstack branches"
 
 on:
   workflow_dispatch:
