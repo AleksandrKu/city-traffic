@@ -51,6 +51,7 @@ jobs:
             --data '{ }' \
             --write-out "%{http_code}" --silent --output /dev/null)
 
+
           # Check for successful response
           if [ "$response" -eq 200 ]; then
             echo "Merge successful"
