@@ -16,7 +16,7 @@ on:
       base_branch:
         type: choice
         description: 'Base branch'
-        default: "staging"
+        default: "preview"
         required: true
         options:
           - "main"
@@ -25,16 +25,15 @@ on:
       compare_branch:
         type: choice
         description: 'Compare branch'
-        default: "preview"
+        default: "staging"
         required: true
         options:
           - "main"
           - "staging"
           - "preview"
-
 jobs:
   update_stack:
-    name: "Merge branches in Contentstack. only for the content type and global field modules of your stack"
+    name: "Merge branches in Contentstack. Only for the content type and global field modules of your stack"
     runs-on: ubuntu-latest
     env: 
       base_url: "https://eu-api.contentstack.com"
@@ -43,14 +42,14 @@ jobs:
     steps:
       - name: Merging Branches API
         run: |
-          echo "api_key: ${{ env.api_key }}"
+          echo "api_key: ${{ inputs.api_key }}"
           echo "authorization: ${{ inputs.authorization }}"
           echo "base_branch: ${{ inputs.base_branch }}"
           echo "compare_branch: ${{ inputs.compare_branch }}"
           echo '${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}'
 
-          # curl --location '${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}' \
-          # --header 'api_key: ${{ inputs.api_key }}' \
-          # --header 'authorization: ${{ inputs.authorization }}' \
-          # --header 'Content-Type: application/json' \
-          # --data '{ }'
+          curl --location '${{ env.base_url }}/v3/stacks/branches_merge?base_branch=${{ inputs.base_branch }}&compare_branch=${{ inputs.compare_branch }}&default_merge_strategy=${{ env.default_merge_strategy }}&merge_comment=${{ env.merge_comment }}' \
+          --header 'api_key: ${{ inputs.api_key }}' \
+          --header 'authorization: ${{ inputs.authorization }}' \
+          --header 'Content-Type: application/json' \
+          --data '{ }'
